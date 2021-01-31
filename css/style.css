@@ -6,6 +6,10 @@ body {
 	background-color: #f7f7f7;
 }
 
+*{
+	box-sizing: border-box;
+}
+
 a, a:link, a:visited {
 	color: #666;
 	font-weight: normal;
@@ -55,11 +59,35 @@ table th {
 	border: 1px solid #000;
 }
 
-table td, th {
-	padding: 10px 20px;
+  td, th {
+	padding: 10px 0px; 
 	border: 1px solid #000;
+	width: 120px;
 }
 
+.btnDelRow{
+	color: rgb(110, 27, 27);
+	transition: all .3s;
+}
+.btnDelRow:hover{
+	cursor: pointer;
+	color: rgb(199, 39, 39);
+	transition: all .3s;
+}
+
+.name{
+	cursor: pointer;
+}
+
+.tr_remove{
+	transition: .3s ease;
+	opacity: 0;
+}
+
+input{
+	max-width: 50px;
+}
+ 
 /*layout*/
 
 #wrapper {
@@ -86,7 +114,7 @@ table td, th {
 }
 
 #content {
-	width: 700px;
+	width: 900px;
 	min-height: 400px;
 	margin-left: auto;
 	margin-right: auto;
