@@ -1,52 +1,83 @@
 "use strict;"
 
-order = {
-    name: 'Молоко',
-    description: 'asdqf',
-    price: 2,
-    currency: '$',
-    firm: 'sacbdf',
-    date: '2019',
-}
 let number = 0;
 
 function orderInformation(order) {
     if (validOrder(order)) {
     let {
+		 id = '',
         name = '-',
         description = '-',
-        price = 0,
+        amount = 0,
         currency = '-',
-        firm = '-',
-        date = '1990',
+        manufacturer = '-',
+
         } = order;
     let table = document.querySelector('#tbl');
     
     number++;
 
     let temp = `<tr class="order tr" id="${number}">
-        <td class="name" onclick="orderDescription(this)">${name}</td>
+        <td class="name" data-id="${id}" onclick="orderDescription(this)">${name}</td>
         <td>${description}</td>
-        <td>${price}</td>
+        <td>${amount}</td>
         <td>${currency}</td>
-        <td>${firm}</td>
-        <td>${date}</td>
+        <td>${manufacturer}</td>
         <td class="btnDelRow" onclick="delRow(this)" >&#10006; </td>
     </tr>`;
     table.innerHTML += temp;
     }
     else alert('Товар неправильно оформлен');
     function validOrder(order) { 
-        if ((order.price < 0) || !Number.isInteger(order.price) || (order.name === '') || (order.description === '') || (order.currency === '') || (order.firm === '') || (order.date === '')) return false;
+      //  if ((order.amount < 0) || !Number.isInteger(order.amount) || (order.name === '') || (order.description === '') || (order.currency === '') || (order.manufacturer === '')) return false;
             return true;
     }
     
 }
-orderInformation(order);
-orderInformation(order);
-orderInformation(order);
-orderInformation(order);
-orderInformation(order);
+
+
+
+
+ function requestGet(){
+	let xhr = new XMLHttpRequest();
+	xhr.open('GET', 'http://45.67.59.109:2001/orders', true);
+	xhr.send();  
+	xhr.onreadystatechange = function() {  
+	  if (xhr.readyState != 4) return;
+	  if (xhr.status != 200) {
+		 alert(xhr.status + ': ' + xhr.statusText);
+	  } else {
+			ord_items = xhr.responseText;
+			ord_items =  JSON.parse(ord_items);
+			ord_items.forEach(element => {	
+				orderInformation(element);
+			});
+	  }
+	}
+}
+
+
+function tableLoad(){
+	html = `	<h1>Orders Products</h1>
+	<div id="orderContainer">
+		<table id="tbl">
+			<tr class="tr">
+				<th class="th">Name</th>
+				<th class="th">Description</th>
+				<th class="th">Amount</th>
+				<th class="th">Currency</th>
+				<th class="th">Manufacturer</th>
+				<th class="th">Control</th>
+			</tr>
+		</table>
+	</div>`;
+	document.querySelector("#content").innerHTML = html;
+	requestGet();
+}
+
+tableLoad()
+ 
+
 
 
 function delRow(t){  
@@ -59,30 +90,32 @@ function delRow(t){
 }
 
 
-formAdd.addEventListener('submit', function(event){
-    event.preventDefault();
 
-    let form = document.forms.formAdd; 
-    let order = {
-        name:  form.elements.name.value,
-        description: form.elements.description.value,
-        price: parseInt(form.elements.price.value, 10),
-        currency: form.elements.currency.value,
-        firm: form.elements.firm.value,
-        date: parseInt(form.elements.date.value, 10),
-    }
-
-    orderInformation(order);
-    form.reset();
-});
  let k = 1;
 
 function orderDescription(t){
-    let order = t.parentNode;
-    let cells = order.querySelectorAll("td");
-    let information = `
-        <div name="contentDescription">
-			<h1>${cells[0].innerHTML}</h1>
+
+	let id = t.dataset.id;
+
+	let xhr = new XMLHttpRequest();
+
+	let params = 'id=' + encodeURIComponent(id);
+
+	let url = 'http://45.67.59.109:2001/order?' + params;
+	xhr.open("GET", url, true);
+
+	
+	xhr.onreadystatechange = function() { 
+	  if (xhr.readyState != 4) return;
+		
+	  if (xhr.status != 200) {
+		 alert(xhr.status + ': ' + xhr.statusText);
+	  } else {
+		
+		  let obj = JSON.parse(xhr.responseText);
+ 
+		let content = `
+			<h1>${obj.name}</h1>
 			<div class="flex">
 				<div class="col col_13">
 					<img src="images/product.png" alt="image" />
@@ -91,34 +124,59 @@ function orderDescription(t){
 					<table>
 						<tr>
 							<td>Price:</td>
-							<td>${cells[2].innerHTML}</td>
+							<td>${obj.amount}</td>
 						</tr>
 						<tr>
 							<td>Currency:</td>
-							<td>${cells[3].innerHTML}</td>
+							<td>${obj.currency}</td>
 						</tr>
 						<tr>
-							<td>Firm:</td>
-							<td>${cells[4].innerHTML}</td>
-						</tr>
-						<tr>
-							<td>Date:</td>
-							<td>${cells[5].innerHTML}</td>
+							<td>manufacturer:</td>
+							<td>${obj.manufacturer}</td>
 						</tr>
 					</table>
 				</div>
 			</div>
 			<h2>Product Description</h2>
-			<p>${cells[1].innerHTML}</p>
-		</div>`;
-    document.querySelector(".description").innerHTML = information;
+			<p>${obj.description}</p>
+			<button data-id=${obj.id} id="btnBut" >Купить </button>
+			<button  id="btnPrev" >Назад </button>`;
+		  document.querySelector("#content").innerHTML = content;
+		  addclickf()			
+	  }
+	
+	}
+	xhr.send(); 
 }
 
+ function addclickf(){
 
+	btnBut.addEventListener('click', function(){
+		let id1 = this.dataset.id;
+
+		let xhr2 = new XMLHttpRequest();
+		let url = 'http://45.67.59.109:2001/order/pay';
+		xhr2.open("POST", url, true);
+
+		let json = {
+			id: id1
+		}
+		
+		xhr2.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+
+		xhr2.onreadystatechange = function() {
+		if (xhr2.readyState != 4) return;
+		if (xhr2.status != 200) {
+			alert(xhr2.status + ': ' + xhr2.statusText);
+		} else {
+				alert( xhr2.responseText);
+		}
+		}
+		xhr2.send(JSON.stringify(json));
+	})
+
+	btnPrev.addEventListener('click', function(){
+		tableLoad()
+	})
+ }
  
-
-tbl.addEventListener('click', (event) => {
-    let tr = tbl.getElementsByClassName('tr');
-    console.warn( Array.from(tr).indexOf(event.target.parentNode));
-});
-   
