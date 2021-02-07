@@ -1,4 +1,4 @@
-"use strict;"
+"use strict";
 
 let number = 0;
 
@@ -47,7 +47,7 @@ function orderInformation(order) {
 	  if (xhr.status != 200) {
 		 alert(xhr.status + ': ' + xhr.statusText);
 	  } else {
-			ord_items = xhr.responseText;
+			let ord_items = xhr.responseText;
 			ord_items =  JSON.parse(ord_items);
 			ord_items.forEach(element => {	
 				orderInformation(element);
@@ -58,7 +58,7 @@ function orderInformation(order) {
 
 
 function tableLoad(){
-	html = `	<h1>Orders Products</h1>
+	let html = `	<h1>Orders Products</h1>
 	<div id="orderContainer">
 		<table id="tbl">
 			<tr class="tr">
@@ -75,7 +75,7 @@ function tableLoad(){
 	requestGet();
 }
 
-tableLoad()
+tableLoad();
  
 
 
