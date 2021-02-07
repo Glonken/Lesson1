@@ -1,6 +1,6 @@
-"use strict;"
+"use strict";
 
-order = {
+let order = {
     name: 'Молоко',
     description: 'asdqf',
     price: 2,
@@ -9,7 +9,7 @@ order = {
     date: '2019',
 }
 
-unfilledOrder = {
+let unfilledOrder = {
     name: 'Масло',
     firm: 'da',
     date: '2018',
@@ -46,33 +46,3 @@ function orderInformation(order) {
 }
 orderInformation(order);
 
- 
-// let tr = document.createElement('tr');
-// let k = 1;
-// for (let i = 0; i < 6; i++) {
-// 	let td = document.createElement('td');
-// 	switch (k) {
-//         case 1:
-//             td.innerHTML = order.name;
-//             break;
-//         case 2:
-//             td.innerHTML = order.description;
-//             break;
-//         case 3:
-//             td.innerHTML = order.price;
-//             break;
-//         case 4:
-//             td.innerHTML = order.currency;
-//             break;
-//         case 5:
-//             td.innerHTML = order.firm;
-//             break;
-//         case 6:
-//             td.innerHTML = order.date;
-//             break;
-//       }	
-//     k++;
-//     tr.appendChild(td);
-// }
-	
-// table.appendChild(tr);
