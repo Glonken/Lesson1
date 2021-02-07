@@ -1,6 +1,6 @@
-"use strict;"
+"use strict";
 
-order = {
+let order = {
     name: 'Молоко',
     description: 'asdqf',
     price: 2,
