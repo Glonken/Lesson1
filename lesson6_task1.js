@@ -27,7 +27,7 @@ let orders = [
 	}
 ]
 
-function orderInformation(orders, length) {
+function orderInformation(orders) {
 	let [order, ...rest] = orders;
 	for (let i = 0; i < orders.length; i++)
 	{	 
@@ -51,7 +51,9 @@ function orderInformation(orders, length) {
     	</tr>`;
     	table.innerHTML += temp;
     	}
-    	else console.warn('Товар неправильно оформлен');
+    	else {
+			console.warn(`Товар ${name} неправильно оформлен`);
+		}
     
     	function validOrder() { 
         	if ((price < 0) || !Number.isInteger(price) || (name === '') || (description === '') || (currency === '') || (firm === '') || (date === '')) return false;
@@ -62,7 +64,7 @@ function orderInformation(orders, length) {
 }
 
 function tableLoad(){
-	let html = `	<h1>Orders Products</h1>
+	let html = `<h1>Orders Products</h1>
 	<div id="orderContainer">
 		<table id="tbl">
 			<tr class="tr">
@@ -76,13 +78,12 @@ function tableLoad(){
 		</table>
 	</div>`;
 	document.querySelector("#content").innerHTML = html;
-    orderInformation(orders, orders.length);
+    orderInformation(orders);
 }
 
 tableLoad();
 
 function orderDescription(t){
-
     let order = t.parentNode;
     let cells = order.querySelectorAll("td");
 
@@ -115,15 +116,12 @@ function orderDescription(t){
 		</div>
 		<h2>Product Description</h2>
 		<p>${cells[1].innerHTML}</p>
-		<button  id="btnPrev" >Назад </button>`;
+		<button id="btnPrev">Назад</button>`;
 		document.querySelector("#content").innerHTML = content;
-		 addclickf();			
+		addclickf();			
 }
 
-function addclickf(){
-	btnPrev.addEventListener('click', function(){
-		tableLoad();
-	})
- }
+let addclickf = () => btnPrev.addEventListener('click', function(){tableLoad();});
+ 
 
 
